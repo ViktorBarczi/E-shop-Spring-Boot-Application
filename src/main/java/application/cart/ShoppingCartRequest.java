@@ -1,0 +1,17 @@
+package application.cart;
+
+import application.list.ItemListResponse;
+import lombok.Getter;
+import lombok.Setter;
+
+
+import java.util.List;
+
+@Setter
+@Getter
+public class ShoppingCartRequest {
+
+    private Long id;
+    private List<ItemListResponse> product;
+    private boolean payed;
+}
