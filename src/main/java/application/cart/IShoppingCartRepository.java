@@ -1,13 +1,13 @@
 package application.cart;
 
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
-
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 @Repository
-public interface IShoppingCartRepository extends CrudRepository<ShoppingCart, Long> {
-    Optional<ShoppingCart> findById(Long id);
-    List<ShoppingCart> findAll();
+public interface IShoppingCartRepository extends JpaRepository<ShoppingCart, Long> {
+  Optional<ShoppingCart> findById(Long id);
+
+  List<ShoppingCart> findAll();
 }

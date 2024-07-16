@@ -1,11 +1,10 @@
 package application.product;
 
-import org.springframework.data.repository.CrudRepository;
+import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
-public interface IProductRepository extends CrudRepository<Product, Long> {
-    List<Product> findAll();
+public interface IProductRepository extends JpaRepository<Product, Long> {
+  List<Product> findAll();
 }
