@@ -51,6 +51,7 @@ public class ProductService implements IProductService {
     Product product = this.repository.findById(id).orElseThrow();
     int amount = request.getAmount() + product.getAmount();
     product.setAmount(amount);
+    this.repository.save(product);
     return new AmountResponse(product.getAmount());
   }
 
