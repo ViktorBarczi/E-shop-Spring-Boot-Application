@@ -13,44 +13,44 @@ import java.util.stream.Collectors;
 @RequestMapping("/product")
 public class ProductController {
 
-    @Autowired
-    private IProductService service;
+  @Autowired
+  private IProductService service;
 
-    @GetMapping()
-    public List<ProductResponse> getAll() {
-        return this.service.getAll().stream().map(ProductResponse::new).collect(Collectors.toList());
-    }
+  @GetMapping()
+  public List<ProductResponse> getAll() {
+    return this.service.getAll().stream().map(ProductResponse::new).collect(Collectors.toList());
+  }
 
-    @PostMapping()
-    @ResponseStatus(HttpStatus.CREATED)
-    public ProductResponse addProd(@RequestBody ProductRequest request){
-        return new ProductResponse(this.service.createNewProduct(request));
-    }
+  @PostMapping()
+  @ResponseStatus(HttpStatus.CREATED)
+  public ProductResponse addProd(@RequestBody ProductRequest request) {
+    return new ProductResponse(this.service.createNewProduct(request));
+  }
 
-    @GetMapping("/{id}")
-    public ProductResponse getProdById(@PathVariable("id") Long id) {
-        return new ProductResponse(this.service.getProduct(id));
-    }
+  @GetMapping("/{id}")
+  public ProductResponse getProdById(@PathVariable Long id) {
+    return new ProductResponse(this.service.getProduct(id));
+  }
 
-    @PutMapping("/{id}")
-    public ProductResponse addProd(@PathVariable("id") Long id, @RequestBody ProductRequest request){
-        return new ProductResponse(this.service.updateProduct(id, request));
-    }
+  @PutMapping("/{id}")
+  public ProductResponse addProd(@PathVariable Long id, @RequestBody ProductRequest request) {
+    return new ProductResponse(this.service.updateProduct(id, request));
+  }
 
-    @DeleteMapping("/{id}")
-    public void deleteProd(@PathVariable("id") Long id){
-        this.service.deleteProduct(id);
-    }
+  @DeleteMapping("/{id}")
+  public void deleteProd(@PathVariable Long id) {
+    this.service.deleteProduct(id);
+  }
 
 
-    @GetMapping("/{id}/amount")
-    public AmountResponse getAmount(@PathVariable("id") Long id){
-        return new AmountResponse(this.service.getAmountFromProduct(id));
-    }
+  @GetMapping("/{id}/amount")
+  public AmountResponse getAmount(@PathVariable Long id) {
+    return new AmountResponse(this.service.getAmountFromProduct(id));
+  }
 
-    @PostMapping("/{id}/amount")
-    public AmountResponse addAmount(@PathVariable("id") Long id, @RequestBody AmountRequest request){
-        return this.service.addAmountToProduct(id, request);
-    }
+  @PostMapping("/{id}/amount")
+  public AmountResponse addAmount(@PathVariable Long id, @RequestBody AmountRequest request) {
+    return this.service.addAmountToProduct(id, request);
+  }
 }
 
