@@ -1,5 +1,6 @@
 package application.product;
 
+import java.io.IOException;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import application.amount.AmountRequest;
@@ -75,6 +76,18 @@ public class ProductService implements IProductService {
     product.setName(requestProduct.getName());
     product.setUnit(requestProduct.getUnit());
     product.setDescription(requestProduct.getDescription());
+
+    List<Product> list = this.repository.findAll();
+
+    for (Product currentProd : list){
+      if (currentProd.getName().equals(product.getName())){
+          try {
+              throw new IOException("Product already exists with the this name: " + product.getName());
+          } catch (IOException e) {
+              throw new RuntimeException(e);
+          }
+      }
+    }
 
     return this.repository.save(product);
   }
