@@ -2,24 +2,28 @@ package application.product;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 public class ProductServiceTest {
-  ProductService productService = new ProductService(new RepositoryStub());
-  // Product product = new Product();
-  // ProductResponse productResponse;
 
-  // @BeforeEach
-  // void init() {
-  //   product.setId(1L);
-  //   product.setName("test");
-  //   product.setDescription("test Description");
-  //   product.setUnit("test Unit");
-  //   product.setAmount(4);
-  //   product.setPrice(4.44);
-  //   productResponse = new ProductResponse(product);
-  // }
+  @Autowired
+  ProductService productService;
+//  ProductService productService = new ProductService(new RepositoryStub());
+//   Product product = new Product();
+//   ProductResponse productResponse;
+//
+//   @BeforeEach
+//   void init() {
+//     product.setId(1L);
+//     product.setName("test");
+//     product.setDescription("test Description");
+//     product.setUnit("test Unit");
+//     product.setAmount(4);
+//     product.setPrice(4.44);
+//     productResponse = new ProductResponse(product);
+//   }
 
 
   @Test
@@ -38,5 +42,6 @@ public class ProductServiceTest {
     assertEquals(productRequest.getUnit(), response.getUnit());
     assertEquals(productRequest.getAmount(), response.getAmount());
     assertEquals(productRequest.getPrice(), response.getPrice());
+    assertEquals(1L,response.getId());
   }
 }

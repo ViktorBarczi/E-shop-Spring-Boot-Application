@@ -10,13 +10,13 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
-//    @Bean
-//    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        http.authorizeHttpRequests().anyRequest().permitAll();
-//        http.formLogin();
-//        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
-//        http.httpBasic();
-//        http.csrf().disable();
-//        return http.build();
-//    }
+    @Bean
+    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.authorizeHttpRequests().anyRequest().permitAll();
+        http.formLogin();
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
+        http.httpBasic();
+        http.csrf().disable();
+        return http.build();
+    }
 }
