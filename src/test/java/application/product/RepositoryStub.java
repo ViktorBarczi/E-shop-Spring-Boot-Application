@@ -1,5 +1,6 @@
 package application.product;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -31,8 +32,7 @@ public class RepositoryStub implements IProductRepository {
 
   @Override
   public List<Product> findAll(Sort sort) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'findAll'");
+    return null;
   }
 
   @Override
@@ -189,8 +189,7 @@ public class RepositoryStub implements IProductRepository {
 
   @Override
   public List<Product> findAll() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'findAll'");
+    return new ArrayList<>();
   }
 
 }
