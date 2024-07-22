@@ -17,6 +17,7 @@ public class SecurityConfig {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
         http.httpBasic();
         http.csrf().disable();
+        http.headers().frameOptions().sameOrigin();
         return http.build();
     }
 }
