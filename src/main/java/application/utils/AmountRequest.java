@@ -1,4 +1,4 @@
-package application.amount;
+package application.utils;
 
 import lombok.Getter;
 import lombok.Setter;
