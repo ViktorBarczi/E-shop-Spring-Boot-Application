@@ -12,6 +12,7 @@ import java.util.List;
 public class ShoppingCartRequest {
 
     private Long id;
+    private String userName;
     private List<ItemListResponse> product;
     private boolean payed;
 }

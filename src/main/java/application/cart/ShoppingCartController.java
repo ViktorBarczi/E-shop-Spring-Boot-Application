@@ -2,6 +2,9 @@ package application.cart;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import application.product.ProductRequest;
+import application.utils.NameRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,9 +42,9 @@ public class ShoppingCartController {
 
   }
 
-  @PostMapping()
-  public ResponseEntity<ShoppingCartResponse> addCart() {
-    return new ResponseEntity<>(new ShoppingCartResponse(this.service.createCart()),
+  @PostMapping("/new")
+  public ResponseEntity<ShoppingCartResponse> addCart(@RequestBody NameRequest request) {
+    return new ResponseEntity<>(new ShoppingCartResponse(this.service.createCart(request)),
         HttpStatus.CREATED);
   }
 

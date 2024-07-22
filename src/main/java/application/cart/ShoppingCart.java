@@ -21,6 +21,9 @@ public class ShoppingCart {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(unique = true)
+    private String userName;
+
     @OneToMany
     private List<ItemList> shoppingItemList = new ArrayList<>();
 
