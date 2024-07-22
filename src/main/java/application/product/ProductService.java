@@ -79,13 +79,13 @@ public class ProductService implements IProductService {
 
     List<Product> list = this.repository.findAll();
 
-    for (Product currentProd : list){
-      if (currentProd.getName().equals(product.getName())){
-          try {
-              throw new IOException("Product already exists with the this name: " + product.getName());
-          } catch (IOException e) {
-              throw new RuntimeException(e);
-          }
+    for (Product currentProd : list) {
+      if (currentProd.getName().equals(product.getName())) {
+        try {
+          throw new IOException("Product already exists with the this name: " + product.getName());
+        } catch (IOException e) {
+          throw new RuntimeException(e);
+        }
       }
     }
 
