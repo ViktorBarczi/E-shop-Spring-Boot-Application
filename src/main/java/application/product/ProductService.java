@@ -76,6 +76,14 @@ public class ProductService implements IProductService {
     product.setUnit(requestProduct.getUnit());
     product.setDescription(requestProduct.getDescription());
 
+    List<Product> list = this.repository.findAll();
+
+    for (Product currentProd : list) {
+      if (currentProd.getName().equals(product.getName())) {
+        return null;
+      }
+    }
+
     return this.repository.save(product);
   }
 
