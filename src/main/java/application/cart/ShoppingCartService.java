@@ -1,6 +1,8 @@
 package application.cart;
 
 import java.util.List;
+
+import application.utils.NameRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import application.exceptions.BadRequestException;
@@ -63,11 +65,11 @@ public class ShoppingCartService {
   }
 
 
-  public ShoppingCart createCart() {
-
+  public ShoppingCart createCart(NameRequest request) {
     ShoppingCart newC = new ShoppingCart();
     newC.getShoppingItemList().clear();
     newC.setPayed(false);
+    newC.setUserName(request.getName());
     return this.repository.save(newC);
 
   }

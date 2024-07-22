@@ -3,8 +3,8 @@ package application.product;
 import java.io.IOException;
 import java.util.List;
 import org.springframework.stereotype.Service;
-import application.amount.AmountRequest;
-import application.amount.AmountResponse;
+import application.utils.AmountRequest;
+import application.utils.AmountResponse;
 
 @Service
 public class ProductService implements IProductService {

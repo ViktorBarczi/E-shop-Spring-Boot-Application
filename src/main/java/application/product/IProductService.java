@@ -1,7 +1,7 @@
 package application.product;
 
 
-import application.amount.*;
+import application.utils.*;
 
 
 import java.util.List;

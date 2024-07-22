@@ -3,8 +3,8 @@ package application.product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import application.amount.AmountRequest;
-import application.amount.AmountResponse;
+import application.utils.AmountRequest;
+import application.utils.AmountResponse;
 
 import java.util.List;
 import java.util.stream.Collectors;
