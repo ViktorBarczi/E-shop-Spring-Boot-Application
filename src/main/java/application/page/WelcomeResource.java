@@ -22,7 +22,7 @@ public class WelcomeResource {
     productRequest.setAmount(4);
     productRequest.setPrice(4.44);
     service.createNewProduct(productRequest);
-    return ("<h1>Welcome to my back-end application! A new \"test\" entity has been added to the database with the name.<h1>");
+    return "Welcome to my back-end application! A new \"test\" entity has been added to the database with the name.";
   }
 
 
