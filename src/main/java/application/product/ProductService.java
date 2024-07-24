@@ -1,12 +1,17 @@
 package application.product;
 
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import application.utils.AmountRequest;
 import application.utils.AmountResponse;
 
 @Service
 public class ProductService implements IProductService {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(ProductService.class);
 
   private final IProductRepository repository;
 
@@ -28,6 +33,7 @@ public class ProductService implements IProductService {
     if (request.getDescription() != null)
       pById.setDescription(request.getDescription());
 
+    LOGGER.info("Product has been updated");
     return this.repository.save(pById);
   }
 
@@ -40,6 +46,7 @@ public class ProductService implements IProductService {
 
   @Override
   public void deleteProduct(Long id) {
+    LOGGER.info("Product has been deleted");
     this.repository.delete(this.repository.findById(id).orElseThrow());
   }
 
@@ -50,6 +57,7 @@ public class ProductService implements IProductService {
     int amount = request.getAmount() + product.getAmount();
     product.setAmount(amount);
     this.repository.save(product);
+    LOGGER.info("Amount has been added to the product");
     return new AmountResponse(product.getAmount());
   }
 
@@ -64,6 +72,7 @@ public class ProductService implements IProductService {
     Product productToFind = this.repository.findById(id).orElseThrow();
     productToFind.setAmount(productToFind.getAmount() - amount);
     this.repository.save(productToFind);
+    LOGGER.info("Amount has been decreased");
   }
 
   @Override
@@ -80,10 +89,11 @@ public class ProductService implements IProductService {
 
     for (Product currentProd : list) {
       if (currentProd.getName().equals(product.getName())) {
+        LOGGER.warn("The product name \"{}\" already exists in the database", product.getName());
         return null;
       }
     }
-
+    LOGGER.info("New product has been created");
     return this.repository.save(product);
   }
 
