@@ -2,7 +2,10 @@ package application.cart;
 
 import java.util.List;
 
+import application.product.ProductService;
 import application.utils.NameRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import application.exceptions.BadRequestException;
@@ -15,6 +18,7 @@ import application.product.Product;
 @Service
 public class ShoppingCartService {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(ShoppingCartService.class);
 
   private final IShoppingCartRepository repository;
 
@@ -41,6 +45,7 @@ public class ShoppingCartService {
     ShoppingCart c = this.repository.findById(cartId).orElseThrow();
     ItemList itemList = null;
     if (product.getAmount() < amount || c.isPayed()) {
+      LOGGER.error("The product {} is out of stock, or the cart has been already payed", productId);
       throw new BadRequestException();
     }
 
@@ -61,6 +66,7 @@ public class ShoppingCartService {
     }
     this.itemListRepository.save(itemList);
     this.repository.save(c);
+    LOGGER.info("Product added to shopping cart");
     return c;
   }
 
@@ -70,6 +76,7 @@ public class ShoppingCartService {
     newC.getShoppingItemList().clear();
     newC.setPayed(false);
     newC.setUserName(request.getName());
+    LOGGER.info("New cart created");
     return this.repository.save(newC);
 
   }
@@ -89,6 +96,7 @@ public class ShoppingCartService {
       p = p + product.getPrice() * items.getAmount();
     }
     this.repository.save(shoppingCart);
+    LOGGER.info("Shopping cart payed");
     return p;
   }
 
@@ -101,6 +109,6 @@ public class ShoppingCartService {
   public void deleteCart(Long id) {
     this.repository.findById(id).orElseThrow();
     this.repository.deleteById(id);
-
+    LOGGER.info("Shopping cart deleted");
   }
 }
