@@ -10,6 +10,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
@@ -22,27 +24,70 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.sql.DataSource;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.interfaces.RSAPublicKey;
+import java.util.Arrays;
 import java.util.UUID;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 @Configuration
-public class SecurityConfig {
+public class SecurityConfig implements WebMvcConfigurer {
+
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("http://localhost:8081")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedHeaders("*")
+                .allowCredentials(false);
+    }
 
     @Bean
-    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        //http.authorizeHttpRequests().anyRequest().permitAll();
-        http.authorizeHttpRequests().anyRequest().hasAnyRole("USER","ADMIN");
-        http.formLogin();
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
-        http.httpBasic();
-        http.csrf().disable();
-        http.headers().frameOptions().sameOrigin();
-        http.oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.authorizeHttpRequests(
+                auth -> {
+                    auth.anyRequest().authenticated();
+                });
+
+        http.sessionManagement(
+                session ->
+                        session.sessionCreationPolicy(
+                                SessionCreationPolicy.STATELESS)
+        );
+
+        http.httpBasic(withDefaults());
+
+        http.csrf(csrf -> csrf.disable());
+
+        http.headers(headers -> headers.frameOptions(frameOptionsConfig-> frameOptionsConfig.disable()));
+
+        http.oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()));
+
+        http.cors().configure(http);
+
         return http.build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:8081"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setAllowCredentials(true);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 
 
