@@ -7,9 +7,12 @@ import application.product.ProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 
 @RestController
@@ -18,6 +21,7 @@ public class WelcomeResource {
   private IProductService service;
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ProductService.class);
+
 
   @GetMapping("/welcome")
   public String welcome() {
@@ -38,9 +42,14 @@ public class WelcomeResource {
     return service.createNewProduct(productRequest);
   }
 
-  @PostMapping("/token")
-  public void token(){
-
+  @DeleteMapping("/resource")
+  public void delete(){
+    List<Product> list = service.getAll();
+    for(Product product : list){
+      if(product.getName().equals("test"))
+        LOGGER.info("The \"test\" entity has been deleted from the database");
+        service.deleteProduct(product.getId());
+    }
   }
 
 
