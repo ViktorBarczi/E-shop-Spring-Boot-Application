@@ -19,8 +19,7 @@ public class EmailController {
     public List<EmailResponse> getAll() {
         return this.service.getAll().stream().map(EmailResponse::new).collect(Collectors.toList());
     }
-
-    @CrossOrigin
+    
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public EmailResponse addEmail(@RequestBody EmailRequest request) {
