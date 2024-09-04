@@ -48,10 +48,10 @@ public class SecurityConfig implements WebMvcConfigurer {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(
-                auth -> {
-                    auth.requestMatchers(new AntPathRequestMatcher("/authenticate")).permitAll().anyRequest().authenticated();
-                });
+//        http.authorizeHttpRequests(
+//                auth -> {
+//                    auth.requestMatchers(new AntPathRequestMatcher("/authenticate")).permitAll().anyRequest().authenticated();
+//                });
 
         http.sessionManagement(
                 session ->
@@ -61,7 +61,10 @@ public class SecurityConfig implements WebMvcConfigurer {
 
         http.httpBasic(withDefaults());
 
-        http.csrf(csrf -> csrf.disable());
+        http.csrf().disable()
+                .authorizeRequests()
+                .antMatchers("/authenticate").permitAll() // Allow /authenticate endpoint
+                .anyRequest().authenticated();
 
         http.headers(headers -> headers.frameOptions(frameOptionsConfig-> frameOptionsConfig.disable()));
 

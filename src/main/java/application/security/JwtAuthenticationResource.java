@@ -29,7 +29,7 @@ public class JwtAuthenticationResource {
     }
 
     @PostMapping("/authenticate")
-    public JwtRespose authenticate(Authentication authentication, @RequestBody UserRequest userRequest) {
+    public JwtRespose authenticate(@RequestBody UserRequest userRequest) {
         if(userRequest.getUsername() == null || userRequest.getPassword() == null) {
             LOGGER.info("Missing username or password");
             throw new BadRequestException();
@@ -45,23 +45,23 @@ public class JwtAuthenticationResource {
         }
 
         LOGGER.info("Authenticating user" );
-        return new JwtRespose(createToken(authentication));
+        return new JwtRespose(createToken());
     }
 
-    private String createToken(Authentication authentication) {
+    private String createToken() {
         var claims = JwtClaimsSet.builder()
                 .issuer("self")
                 .issuedAt(Instant.now())
                 .expiresAt(Instant.now().plusSeconds(2))
-                .subject("authentication.getName()")
-                .claim("scope", createScope(authentication))
+                .subject("User") //authentication.getName()
+                .claim("scope", createScope())
                 .build();
 
         return jwtEncoder.encode(JwtEncoderParameters.from(claims))
                 .getTokenValue();
     }
 
-    private String createScope(Authentication authentication) {
+    private String createScope() {
 //        return authentication.getAuthorities().stream()
 //                .map(GrantedAuthority::getAuthority)
 //                .collect(Collectors.joining(" "));
