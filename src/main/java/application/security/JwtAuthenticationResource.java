@@ -1,51 +1,47 @@
 package application.security;
 
 import java.time.Instant;
-import java.util.stream.Collectors;
 
 import application.exceptions.BadRequestException;
 import application.product.ProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.HttpClientErrorException;
 
 @RestController
 public class JwtAuthenticationResource {
 
-    private JwtEncoder jwtEncoder;
+    private final JwtEncoder jwtEncoder;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ProductService.class);
 
-    public JwtAuthenticationResource(JwtEncoder jwtEncoder) {
+    private final UserDetailsService detailsService;
+    private final JwtDecoder jwtDecoder;
+    private final AuthenticationService authenticationService;
+
+    @Autowired
+    public JwtAuthenticationResource(JwtEncoder jwtEncoder, UserDetailsService authenticationManager , JwtDecoder jwtDecoder, AuthenticationService authenticationService) {
         this.jwtEncoder = jwtEncoder;
+        this.detailsService = authenticationManager;
+        this.jwtDecoder = jwtDecoder;
+        this.authenticationService = authenticationService;
     }
 
     @PostMapping("/authenticate")
     public JwtRespose authenticate(@RequestBody UserRequest userRequest) {
-        if(userRequest.getUsername() == null || userRequest.getPassword() == null) {
-            LOGGER.info("Missing username or password");
-            throw new BadRequestException();
+        if(authenticationService.authenticate(userRequest)) {
+            return new JwtRespose(createToken());
         }
-        if(!userRequest.getUsername().equals("User") && !userRequest.getUsername().equals("Admin")) {
-            LOGGER.info("Invalid username");
-            throw new BadRequestException();
-        }
-
-        if(!userRequest.getPassword().equals("dummy")){
-            LOGGER.info("Invalid password");
-            throw new BadRequestException();
-        }
-
-        LOGGER.info("Authenticating user" );
-        return new JwtRespose(createToken());
+        else
+            return null;
     }
 
     private String createToken() {
