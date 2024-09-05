@@ -36,6 +36,27 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @Configuration
 public class SecurityConfig implements WebMvcConfigurer {
 
+    @Bean
+    public UserDetailsService userDetailsService(DataSource dataSource){
+        var user = User.withUsername("User")
+                .password("dummy")
+                .passwordEncoder(str -> passwordEncoder().encode(str))
+                .roles("USER")
+                .build();
+
+        var admin = User.withUsername("Admin")
+                .password("dummy")
+                .passwordEncoder(str -> passwordEncoder().encode(str))
+                .roles("ADMIN")
+                .build();
+
+        var jdbc = new JdbcUserDetailsManager(dataSource);
+        jdbc.createUser(user);
+        jdbc.createUser(admin);
+
+        return jdbc;
+    }
+
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
@@ -83,26 +104,7 @@ public class SecurityConfig implements WebMvcConfigurer {
                 .build();
     }
 
-    @Bean
-    public UserDetailsService userDetailsService(DataSource dataSource){
-        var user = User.withUsername("User")
-                .password("dummy")
-                .passwordEncoder(str -> passwordEncoder().encode(str))
-                .roles("USER")
-                .build();
 
-        var admin = User.withUsername("Admin")
-                .password("dummy")
-                .passwordEncoder(str -> passwordEncoder().encode(str))
-                .roles("ADMIN")
-                .build();
-
-        var jdbc = new JdbcUserDetailsManager(dataSource);
-        jdbc.createUser(user);
-        jdbc.createUser(admin);
-
-        return jdbc;
-    }
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder(){
